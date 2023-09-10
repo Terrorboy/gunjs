@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>crdt</title>
+    <style>
+        body { margin:0; padding: 0; }
+        #app { width: 100vw; height: 100vh; }
+    </style>
+</head>
+<body>
+    <div id="app" contenteditable="true"></div>
+    <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gun/sea.js"></script>
+    <script>
+        //const Guns = Gun(['http://localhost/gun']);
+        const Guns = Gun(['https://gunjs.onrender.com/gun']);
+        const gun = Guns.get('html');
+        document.querySelector('#app').addEventListener('keyup', (e)=>{
+            gun.put({val: e.target.innerHTML});
+        });
+        gun.on((data)=> {
+            if (document.querySelector('#app').innerHTML == data.val) {
+                return;
+            }
+            document.querySelector('#app').innerHTML = data.val;
+        })
+    </script>
+</body>
+</html>
